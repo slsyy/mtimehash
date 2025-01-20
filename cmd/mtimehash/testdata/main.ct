@@ -1,0 +1,35 @@
+# Show help
+$ mtimehash --help
+NAME:
+   mtimehash - Set file modification times based on the hash of the file content
+
+USAGE:
+   mtimehash [global options] command [command options]
+
+COMMANDS:
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --max-unix-time value     modulo limit for mtime (default: 1704067200, which is a reasonable limit as it is a date from the past (begining of the year 2024))
+   --verbose, -v             Enable verbose logging (default: false)
+   --cpu-profile-path value  Path to CPU profile output file
+   --help, -h                show help
+
+
+# Process two files
+$ fecho first foo
+$ fecho second bar
+$ fecho inputStdin first\nsecond
+$ mtimehash < inputStdin
+
+# Try to process a directory
+$ mkdir dir
+$ fecho inputStdin dir
+$ mtimehash < inputStdin --> FAIL 1
+
+# Check profiler
+$ fecho file foo
+$ fecho inputStdin file
+$ mtimehash --cpu-profile-path=profile < inputStdin
+$ fileNotEmpty profile
+
